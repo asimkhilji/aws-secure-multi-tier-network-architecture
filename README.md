@@ -26,10 +26,25 @@ Created and attached an IGW to allow public subnet resources to reach the intern
 <img width="960" height="417" alt="4" src="https://github.com/user-attachments/assets/4b8862a0-84a3-45ae-8afd-594ef1d5d244" />
 
 
-Step 4: NAT Gateways
+## Step 4: NAT Gateways
 Deployed one NAT Gateway per AZ (not a single shared NAT) so that outbound 
 internet access for private instances doesn't depend on a single AZ's availability.
 
 - **NAT-A** → Public-Subnet-A (Elastic IP attached)
 - **NAT-B** → Public-Subnet-B (Elastic IP attached)
 <img width="960" height="421" alt="5" src="https://github.com/user-attachments/assets/5f17f029-8695-49d1-a53e-629fede788a1" />
+
+
+## Step 6: Security Groups
+Implemented security-group chaining instead of broad CIDR rules — 
+no resource other than the ALB and Bastion (locked to my IP) is 
+directly exposed to the internet.
+
+| Security Group | Inbound Rule | Source |
+|---|---|---|
+| ALB-SG | HTTP 80, HTTPS 443 | 0.0.0.0/0 |
+| Bastion-SG | SSH 22 | My IP /32 |
+| EC2-SG | HTTP 80 | ALB-SG |
+| EC2-SG | SSH 22 | Bastion-SG |
+
+<img width="960" height="395" alt="8" src="https://github.com/user-attachments/assets/43f6b021-fbbe-458c-9e2f-a4a6690528ce" />
