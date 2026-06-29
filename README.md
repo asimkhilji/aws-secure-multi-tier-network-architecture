@@ -18,3 +18,18 @@ Created a custom VPC to isolate the project's network from the default VPC.
 Split into 4 subnets across 2 Availability Zones for high availability.
 <img width="960" height="410" alt="3" src="https://github.com/user-attachments/assets/2e28445d-7b82-4ebe-9613-124c7546a81b" />
 
+## Step 3: Internet Gateway
+Created and attached an IGW to allow public subnet resources to reach the internet.
+
+- **Name:** `multi-tier-igw`
+- **Attached to:** `multi-tier-vpc`
+<img width="960" height="417" alt="4" src="https://github.com/user-attachments/assets/4b8862a0-84a3-45ae-8afd-594ef1d5d244" />
+
+
+Step 4: NAT Gateways
+Deployed one NAT Gateway per AZ (not a single shared NAT) so that outbound 
+internet access for private instances doesn't depend on a single AZ's availability.
+
+- **NAT-A** → Public-Subnet-A (Elastic IP attached)
+- **NAT-B** → Public-Subnet-B (Elastic IP attached)
+<img width="960" height="421" alt="5" src="https://github.com/user-attachments/assets/5f17f029-8695-49d1-a53e-629fede788a1" />
